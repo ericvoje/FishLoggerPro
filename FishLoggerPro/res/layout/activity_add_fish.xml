@@ -1,0 +1,118 @@
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="6dp"
+    android:layout_marginRight="6dp"
+    android:layout_marginTop="6dp"
+    android:alignmentMode="alignBounds"
+    android:columnCount="5"
+    android:columnOrderPreserved="false"
+    tools:context="com.fishloggerpro.act.AddFishActivity" >
+
+    <TextView
+        android:id="@+id/text_add_fish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnSpan="5"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/add_fish"
+        android:textSize="32sp" />
+
+    <TextView
+        android:id="@+id/text_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_gravity="right"
+        android:layout_row="1"
+        android:text="@string/label"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Space
+        android:layout_width="12dp"
+        android:layout_column="1"
+        android:layout_gravity="fill"
+        android:layout_row="1" />
+
+    <EditText
+        android:id="@+id/editText_label"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_column="2"
+        android:layout_columnSpan="2"
+        android:layout_gravity="left"
+        android:layout_row="1"
+        android:inputType="textShortMessage" >
+    </EditText>
+
+    <TextView
+        android:id="@+id/text_length"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_row="2"
+        android:text="@string/length"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/editText_length"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_column="2"
+        android:layout_columnSpan="1"
+        android:layout_gravity="left"
+        android:layout_row="2"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/text_lengthUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="4"
+        android:layout_gravity="left"
+        android:layout_row="2"
+        android:text="@string/lengthUnit"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/text_weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_row="3"
+        android:text="@string/weight"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/editText_weight"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_column="2"
+        android:layout_columnSpan="1"
+        android:layout_gravity="left"
+        android:layout_row="3"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/text_weightUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="4"
+        android:layout_gravity="left"
+        android:layout_row="3"
+        android:text="@string/weightUnit"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/button_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_columnSpan="5"
+        android:layout_gravity="center_horizontal"
+        android:layout_row="4"
+        android:text="@string/submit" />
+
+</GridLayout>
