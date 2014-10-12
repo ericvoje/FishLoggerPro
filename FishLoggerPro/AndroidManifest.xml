@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.fishloggerpro"
+    package="com.fishloggerpro"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -23,7 +23,7 @@
         </activity>
 
         <service
-            android:name=".DBService"
+            android:name="com.fishloggerpro.srv.DBService"
             android:label="@string/logger_service"
             android:process=":logger_service" >
         </service>
@@ -43,7 +43,7 @@
             android:label="@string/title_activity_search" >
         </activity>
         <activity
-            android:name=".ListActivity"
+            android:name="com.fishloggerpro.act.ListActivity"
             android:label="@string/title_activity_list" >
         </activity>
     </application>

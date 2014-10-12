@@ -1,6 +1,6 @@
 package com.fishloggerpro.act;
 
-import com.example.fishloggerpro.R;
+import com.fishloggerpro.R;
 
 import android.app.Activity;
 import android.os.Bundle;
