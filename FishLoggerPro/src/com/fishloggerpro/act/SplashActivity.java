@@ -1,10 +1,17 @@
 package com.fishloggerpro.act;
 
-import com.fishloggerpro.R;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import com.fishloggerpro.R;
+import com.fishloggerpro.srv.DBService;
 
 public class SplashActivity extends Activity {
 
@@ -12,6 +19,16 @@ public class SplashActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
+
+		Intent intent = new Intent(this, DBService.class);
+		intent.putExtra("command", "login");
+		startService(intent);
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+
 	}
 
 	@Override

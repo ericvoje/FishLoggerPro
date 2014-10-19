@@ -8,28 +8,35 @@
         android:minSdkVersion="14"
         android:targetSdkVersion="21" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.fishloggerpro.act.MenuActivity"
+            android:name=".act.MenuActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.fishloggerpro.act.AddFishActivity"
+            android:name=".act.AddFishActivity"
             android:label="@string/title_activity_add_fish" >
         </activity>
 
         <service
-            android:name="com.fishloggerpro.srv.DBService"
-            android:label="@string/logger_service"
+            android:name=".srv.DBService"
+            android:exported="false"
             android:process=":logger_service" >
         </service>
 
         <activity
-            android:name="com.fishloggerpro.act.SplashActivity"
+            android:name=".act.SplashActivity"
             android:label="@string/title_activity_splash" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,12 +46,17 @@
  >
         </activity>
         <activity
-            android:name="com.fishloggerpro.act.SearchActivity"
+            android:name=".act.SearchActivity"
             android:label="@string/title_activity_search" >
         </activity>
         <activity
-            android:name="com.fishloggerpro.act.ListActivity"
+            android:name=".act.ListActivity"
             android:label="@string/title_activity_list" >
+        </activity>
+        <activity
+            android:name="com.fishloggerpro.act.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
     </application>
 
