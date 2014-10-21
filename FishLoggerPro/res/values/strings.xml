@@ -10,11 +10,15 @@
     <string name="label">Label</string>
     <string name="length">Length</string>
     <string name="weight">Weight</string>
+    <string name="bait">Bait</string>
+    <string name="note">Note</string>
+    <string name="select_photo">Select Photo</string>
     <string name="lengthUnit">in</string>
     <string name="weightUnit">lbs</string>
     <string name="submit">Submit</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="add_species">Add Species</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="title_activity_list">ListActivity</string>
 

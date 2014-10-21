@@ -8,8 +8,6 @@ import java.net.Socket;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.os.IBinder;
-
 import com.fishloggerpro.act.MenuActivity;
 
 public class DBService extends IntentService {

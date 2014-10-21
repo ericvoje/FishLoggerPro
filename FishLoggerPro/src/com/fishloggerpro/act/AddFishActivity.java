@@ -1,7 +1,5 @@
 package com.fishloggerpro.act;
 
-import com.fishloggerpro.R;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,12 +8,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.fishloggerpro.R;
 
 public class AddFishActivity extends Activity {
 
 	Button button_submit;
-	EditText editText_label, editText_length, editText_weight;
+	EditText editText_note, editText_length, editText_weight;
+	Spinner spinner_species;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,18 +55,18 @@ public class AddFishActivity extends Activity {
 			}
 
 		});
-		editText_label = (EditText) this.findViewById(R.id.editText_label);
+		editText_note = (EditText) this.findViewById(R.id.editText_note);
 		editText_length = (EditText) this.findViewById(R.id.editText_length);
 		editText_weight = (EditText) this.findViewById(R.id.editText_weight);
 	}
 
 	public void submitFish() {
-		String label = "";
+		String note = "";
 		int weight = 0;
 		int length = 0;
 
 		// Collect info from form
-		label = editText_label.getText().toString();
+		note = editText_note.getText().toString();
 		length = Integer.getInteger(editText_length.getText().toString(), 0);
 		weight = Integer.getInteger(editText_weight.getText().toString(), 0);
 

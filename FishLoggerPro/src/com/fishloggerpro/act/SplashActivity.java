@@ -1,15 +1,10 @@
 package com.fishloggerpro.act;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-
 import com.fishloggerpro.R;
 import com.fishloggerpro.srv.DBService;
 
@@ -29,6 +24,8 @@ public class SplashActivity extends Activity {
 	protected void onStart() {
 		super.onStart();
 
+		Intent intent = new Intent(this, AddFishActivity.class);
+		startActivity(intent);
 	}
 
 	@Override

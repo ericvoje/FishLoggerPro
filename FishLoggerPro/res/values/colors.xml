@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="blue">#0398D1</color>
+    <color name="l_blue">#2FB7EB</color>
+    <color name="d_blue">#02506D</color>
+    <color name="green">#00DB6C</color>
+    <color name="l_green">#27EF8A</color>
+    <color name="d_green">#007A3C</color>
+    <color name="teal">#00D2AF</color>
+    <color name="l_teal">#27ECCB</color>
+    <color name="d_teal">#006E5C</color>
+    <color name="white">#000000</color>
+
+</resources>
