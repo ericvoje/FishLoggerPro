@@ -1,9 +1,14 @@
 package com.fishloggerpro.srv;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Catch {
+public class Catch implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String note;
 	private String species;
 	private double weight;
@@ -38,7 +43,8 @@ public class Catch {
 	 * 
 	 * @return
 	 */
-	public String printCatchString() {
+	@Override
+	public String toString() {
 		StringBuilder str = new StringBuilder();
 
 		str.append(species + " ");

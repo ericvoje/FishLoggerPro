@@ -3,31 +3,33 @@ package com.fishloggerpro.srv;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
 import android.app.IntentService;
 import android.content.Intent;
-import com.fishloggerpro.act.MenuActivity;
+import android.os.Bundle;
+import android.os.ResultReceiver;
 
 public class DBService extends IntentService {
-
-	boolean isConnected;
-
-	public DBService(String name) {
-		super(name);
-		isConnected = false;
-	}
-
-	public DBService() {
-		super("FLP_IntentService");
-		isConnected = false;
-	}
 
 	private Socket socket;
 	private PrintWriter out;
 	private BufferedReader in;
 	private String connectionKey;
+
+	private ResultReceiver sReceiver;
+
+	public DBService(String name) {
+		super(name);
+		connectionKey = "";
+	}
+
+	public DBService() {
+		super("FLP_IntentService");
+		connectionKey = "";
+	}
 
 	/**
 	 * Entry point for IntentService. Walks through command extra to communicate
@@ -41,10 +43,29 @@ public class DBService extends IntentService {
 		if (command == null) {
 			return;
 		} else if (command.compareTo("login") == 0) {
-			testLogin("beerent", "password1");
+			String result = testLogin("beerent", "password1");
+			sReceiver = intent.getParcelableExtra("receiver");
+			if (result.length() > 1) {
+				Bundle b = new Bundle();
+				b.putString("connectionKey", result);
+				sReceiver.send(0, b);
+			} else {
+				sReceiver.send(-1, null);
+			}
 		} else if (command.compareTo("add") == 0) {
-			testAddFish();
+			sReceiver = intent.getParcelableExtra("receiver");
+			Catch c = new Catch(intent.getExtras().getString("species"), intent
+					.getExtras().getString("note"), intent.getExtras()
+					.getDouble("weight"), intent.getExtras()
+					.getDouble("length"), intent.getExtras().getString("bait"));
+			connectionKey = intent.getStringExtra("connectionKey");
+			int result = testAddFish(c);
+			Bundle b = new Bundle();
+			b.putInt("result", result);
+			sReceiver.send(result, b);
 		} else if (command.compareTo("search") == 0) {
+
+		} else if (command.compareTo("newuser") == 0) {
 
 		}
 
@@ -56,7 +77,7 @@ public class DBService extends IntentService {
 	 */
 	private void connect() {
 		try {
-			socket = new Socket("192.168.1.109", 5678);
+			socket = new Socket("192.168.1.149", 5678);
 			out = new PrintWriter(socket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
@@ -107,34 +128,53 @@ public class DBService extends IntentService {
 	 * @param username
 	 * @param password
 	 */
-	public void testLogin(String username, String password) {
+	public String testLogin(String username, String password) {
 		connect();
 		String result = read();
 		if (result == null) {
 			System.out.println("No response.");
-			return;
+			return "";
 		}
-		out.println("login;" + username + ";" + password);
+		out.println("login");
+		read();
+		out.println(username);
+		read();
+		out.println(password);
 		result = read();
-		this.connectionKey = result;
-		System.out.println(result + " of length " + result.length());
-		isConnected = true;
-		Intent intent = new Intent(this, MenuActivity.class);
-		startActivity(intent);
+		if (result.equals("-1")) {
+			System.out.println("shit");
+			return "";
+		} else {
+			this.connectionKey = result;
+			System.out.println(result + " of length " + result.length());
+			return result;
+		}
 	}
 
 	/**
 	 * Attempts to add a fish
 	 */
-	public void testAddFish() {
+	public int testAddFish(Catch c) {
 		connect();
 		read();
-		out.println("add;" + this.connectionKey);
-		if (read().equals("-1"))
+		out.println(connectionKey);
+		if (read().equals("-1")) {
 			System.out.println("connection authentication failed");
-		else {
-			System.out.println("user recognized");
+			return -1;
 		}
+		out.println("add");
+		read();
+		// Create the output stream to the server
+		try {
+			ObjectOutputStream outToServer = new ObjectOutputStream(
+					socket.getOutputStream());
+			outToServer.writeObject(c);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return -2;
+		}
+		return 0;
+
 	}
 
 	/**
