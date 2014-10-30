@@ -15,6 +15,11 @@ public class Catch implements Serializable {
 	private double length;
 	private String bait;
 	private Date date;
+	private String conditions;
+	private String longitude;
+	private String latitude;
+
+	// private String image;
 
 	// image
 	// time?
@@ -29,13 +34,16 @@ public class Catch implements Serializable {
 	 * @param bait
 	 */
 	public Catch(String species, String note, double weight, double length,
-			String bait) {
+			String bait, String conditions, String longitude, String latitude) {
 		this.species = species;
 		this.note = note;
 		this.weight = weight;
 		this.length = length;
 		this.bait = bait;
 		date = new Date();
+		this.conditions = conditions;
+		this.longitude = longitude;
+		this.latitude = latitude;
 	}
 
 	/**
@@ -52,7 +60,10 @@ public class Catch implements Serializable {
 		str.append(length + " ");
 		str.append(bait + " ");
 		str.append(date.toString() + " ");
-		str.append(note);
+		str.append(note + " ");
+		str.append(conditions + " ");
+		str.append(longitude + " ");
+		str.append(latitude + " ");
 
 		return str.toString();
 	}
@@ -79,6 +90,18 @@ public class Catch implements Serializable {
 
 	public Date getDate() {
 		return date;
+	}
+
+	public String getConditions() {
+		return conditions;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public String getLatitude() {
+		return latitude;
 	}
 
 }

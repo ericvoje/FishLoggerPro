@@ -15,8 +15,11 @@
     <string name="select_photo">Select Photo</string>
     <string name="lengthUnit">in</string>
     <string name="weightUnit">lbs</string>
+    <string name="conditions">Conditions</string>
     <string name="submit">Submit</string>
     <string name="title_activity_splash">SplashActivity</string>
+    <string name="text_gps">Record location?</string>
+    <string name="switch_gps">Record GPS Location</string>
     <string name="hello_world">Hello world!</string>
     <string name="add_species">Add Species</string>
     <string name="title_activity_search">SearchActivity</string>

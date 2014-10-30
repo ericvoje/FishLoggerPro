@@ -57,7 +57,10 @@ public class DBService extends IntentService {
 			Catch c = new Catch(intent.getExtras().getString("species"), intent
 					.getExtras().getString("note"), intent.getExtras()
 					.getDouble("weight"), intent.getExtras()
-					.getDouble("length"), intent.getExtras().getString("bait"));
+					.getDouble("length"), intent.getExtras().getString("bait"),
+					intent.getExtras().getString("conditions"), intent
+							.getExtras().getString("longitude"), intent
+							.getExtras().getString("latitude"));
 			connectionKey = intent.getStringExtra("connectionKey");
 			int result = testAddFish(c);
 			Bundle b = new Bundle();
@@ -77,7 +80,7 @@ public class DBService extends IntentService {
 	 */
 	private void connect() {
 		try {
-			socket = new Socket("192.168.1.149", 5678);
+			socket = new Socket("192.168.1.26", 5678);
 			out = new PrintWriter(socket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
