@@ -13,6 +13,8 @@
     <string name="bait">Bait</string>
     <string name="note">Note</string>
     <string name="select_photo">Select Photo</string>
+    <string name="dialog_photo">Take a photo?</string>
+    <string name="dialog_new">New Photo</string>
     <string name="lengthUnit">in</string>
     <string name="weightUnit">lbs</string>
     <string name="conditions">Conditions</string>

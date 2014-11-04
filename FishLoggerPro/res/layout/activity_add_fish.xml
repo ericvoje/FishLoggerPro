@@ -132,7 +132,7 @@
             android:paddingBottom="5dp" >
 
             <Button
-                android:id="@+id/button_select_photo"
+                android:id="@+id/button_photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center_vertical"

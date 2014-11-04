@@ -62,15 +62,14 @@ public class SplashActivity extends Activity implements Receiver {
 
 	@Override
 	public void onReceiveResult(int resultCode, Bundle resultData) {
-		if (resultCode == 0) {
-			Intent intent = new Intent(this, AddFishActivity.class);
-			intent.putExtra("connectionKey",
-					resultData.getString("connectionKey"));
-			startActivity(intent);
-		} else {
-			Toast.makeText(getApplicationContext(), "Login Failed",
-					Toast.LENGTH_SHORT).show();
-		}
+		Intent intent = new Intent(this, AddFishActivity.class);
+		intent.putExtra("connectionKey", resultData.getString("connectionKey"));
+		startActivity(intent);
+		/*
+		 * if (resultCode == 0) { } else {
+		 * Toast.makeText(getApplicationContext(), "Login Failed",
+		 * Toast.LENGTH_SHORT).show(); }
+		 */
 
 	}
 }
