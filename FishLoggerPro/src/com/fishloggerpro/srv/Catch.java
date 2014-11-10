@@ -3,6 +3,8 @@ package com.fishloggerpro.srv;
 import java.io.Serializable;
 import java.util.Date;
 
+import android.graphics.Bitmap;
+
 public class Catch implements Serializable {
 
 	/**
@@ -18,11 +20,6 @@ public class Catch implements Serializable {
 	private String conditions;
 	private String longitude;
 	private String latitude;
-
-	// private String image;
-
-	// image
-	// time?
 
 	/**
 	 * Create a new Catch type. Image support to be added later

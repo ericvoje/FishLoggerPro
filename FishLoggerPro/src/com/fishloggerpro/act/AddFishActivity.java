@@ -1,7 +1,8 @@
 package com.fishloggerpro.act;
 
 import java.io.File;
-import java.util.Calendar;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.app.Activity;
@@ -9,11 +10,15 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.View;
@@ -88,8 +93,6 @@ public class AddFishActivity extends Activity implements Receiver {
 			}
 
 			public void onProviderEnabled(String provider) {
-				Toast.makeText(getApplicationContext(), "GPS Enabled",
-						Toast.LENGTH_SHORT).show();
 			}
 
 			public void onProviderDisabled(String provider) {
@@ -159,15 +162,31 @@ public class AddFishActivity extends Activity implements Receiver {
 								Intent intent = new Intent(
 										MediaStore.ACTION_IMAGE_CAPTURE);
 								if (intent.resolveActivity(getPackageManager()) != null) {
-									/*
-									 * String filename = genFilename(); File
-									 * file = new File(AddFishActivity.this
-									 * .getBaseContext().getFilesDir(),
-									 * filename);
-									 */
-									startActivityForResult(intent,
-											REQUEST_IMAGE_CAPTURE);
+									try {
+										image = genImageFile();
+									} catch (IOException e) {
+										e.printStackTrace();
+										return;
+									}
+									if (image != null) {
+										intent.putExtra(
+												MediaStore.EXTRA_OUTPUT,
+												Uri.fromFile(image));
+										startActivityForResult(intent,
+												REQUEST_IMAGE_CAPTURE);
+									}
 								}
+							}
+						});
+				alertDialogBuilder.setNeutralButton("Select Photo",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								Intent intent = new Intent(Intent.ACTION_PICK);
+								intent.setType("image/*");
+								startActivityForResult(intent,
+										REQUEST_SAVED_IMAGE);
 							}
 						});
 				alertDialogBuilder.setNegativeButton("Cancel",
@@ -207,20 +226,39 @@ public class AddFishActivity extends Activity implements Receiver {
 
 	}
 
+	/**
+	 * What to do when returning from activity
+	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == REQUEST_IMAGE_CAPTURE) {
 			if (resultCode == RESULT_OK) {
-				Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-				imageView_photo.setImageBitmap(imageBitmap);
+				/*
+				 * Set ImageView Bitmap imageBitmap = (Bitmap)
+				 * data.getExtras().get("data");
+				 * imageView_photo.setImageBitmap(imageBitmap);
+				 */
 			} else {
-
+				image = null;
 			}
 		} else if (requestCode == REQUEST_SAVED_IMAGE) {
 			if (resultCode == RESULT_OK) {
+				Uri selectedImage = data.getData();
+				String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
+				Cursor cursor = getContentResolver().query(selectedImage,
+						filePathColumn, null, null, null);
+				cursor.moveToFirst();
+
+				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+				String filePath = cursor.getString(columnIndex);
+				cursor.close();
+
+				image = new File(filePath);
+				// Set ImageView to photo
+				// Deal with multiple images?
 			} else {
-
+				image = null;
 			}
 		}
 	}
@@ -269,56 +307,30 @@ public class AddFishActivity extends Activity implements Receiver {
 		intent.putExtra("species", species);
 		intent.putExtra("bait", bait);
 		intent.putExtra("conditions", conditions);
-		intent.putExtra("longitude", longitude);
-		intent.putExtra("latitude", latitude);
 		intent.putExtra("length", length);
 		intent.putExtra("weight", weight);
+		intent.putExtra("longitude", longitude);
+		intent.putExtra("latitude", latitude);
+		intent.putExtra("image", image);
 		startService(intent);
 	}
 
-	/* Creates a filename based on the current time */
-	private String genFilename() {
-		Calendar cal = Calendar.getInstance();
-		int year = cal.get(Calendar.YEAR);
-		int month = cal.get(Calendar.MONTH);
-		int day = cal.get(Calendar.DAY_OF_MONTH);
-		int hour = cal.get(Calendar.HOUR);
-		int minute = cal.get(Calendar.MINUTE);
-		int second = cal.get(Calendar.SECOND);
-
-		StringBuilder sb = new StringBuilder();
-		if (month < 10) {
-			sb.append("0");
-			sb.append(month);
-		} else {
-			sb.append(month);
-		}
-		if (day < 10) {
-			sb.append("0");
-			sb.append(day);
-		} else {
-			sb.append(day);
-		}
-		sb.append(year);
-		sb.append("_");
-		if (hour < 10) {
-			sb.append("0");
-			sb.append(hour);
-		} else {
-			sb.append(hour);
-		}
-		if (minute < 10) {
-			sb.append("0");
-			sb.append(minute);
-		} else {
-			sb.append(minute);
-		}
-		if (second < 10) {
-			sb.append("0");
-			sb.append(second);
-		} else {
-			sb.append(second);
-		}
-		return sb.toString();
+	/**
+	 * Returns a file with a unique name
+	 * 
+	 * @throws IOException
+	 */
+	private File genImageFile() throws IOException {
+		// Create an image file name
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+				.format(new Date());
+		String imageFileName = "JPEG_" + timeStamp + "_";
+		File storageDir = Environment
+				.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+		File f = File.createTempFile(imageFileName, /* prefix */
+				".jpg", /* suffix */
+				storageDir /* directory */
+		);
+		return f;
 	}
 }

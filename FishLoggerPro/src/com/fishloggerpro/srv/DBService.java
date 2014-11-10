@@ -1,9 +1,13 @@
 package com.fishloggerpro.srv;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -43,11 +47,11 @@ public class DBService extends IntentService {
 		if (command == null) {
 			return;
 		} else if (command.compareTo("login") == 0) {
-			String result = testLogin("beerent", "password1");
+			testLogin("beerent", "password1");
 			sReceiver = intent.getParcelableExtra("receiver");
-			if (result.length() > 1) {
+			if (connectionKey.length() > 1) {
 				Bundle b = new Bundle();
-				b.putString("connectionKey", result);
+				b.putString("connectionKey", connectionKey);
 				sReceiver.send(0, b);
 			} else {
 				sReceiver.send(-1, null);
@@ -61,8 +65,9 @@ public class DBService extends IntentService {
 					intent.getExtras().getString("conditions"), intent
 							.getExtras().getString("longitude"), intent
 							.getExtras().getString("latitude"));
+			File image = (File) intent.getExtras().get("image");
 			connectionKey = intent.getStringExtra("connectionKey");
-			int result = testAddFish(c);
+			int result = testAddFish(c, image);
 			Bundle b = new Bundle();
 			b.putInt("result", result);
 			sReceiver.send(result, b);
@@ -78,15 +83,17 @@ public class DBService extends IntentService {
 	/**
 	 * Connect to server
 	 */
-	private void connect() {
+	private int connect() {
 		try {
-			socket = new Socket("192.168.1.26", 5678);
+			socket = new Socket("192.168.1.149", 5678);
 			out = new PrintWriter(socket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
 		} catch (IOException e) {
 			e.printStackTrace();
+			return -1;
 		}
+		return 0;
 	}
 
 	/**
@@ -101,15 +108,6 @@ public class DBService extends IntentService {
 			System.out.println(e.getStackTrace());
 		}
 		return null;
-	}
-
-	/**
-	 * Writes to server
-	 * 
-	 * @param str
-	 */
-	private void write(String str) {
-		out.println(str);
 	}
 
 	/**
@@ -131,12 +129,15 @@ public class DBService extends IntentService {
 	 * @param username
 	 * @param password
 	 */
-	public String testLogin(String username, String password) {
-		connect();
+	public void testLogin(String username, String password) {
+		// Connect
+		if (connect() == -1) {
+			return;
+		}
 		String result = read();
 		if (result == null) {
 			System.out.println("No response.");
-			return "";
+			return;
 		}
 		out.println("login");
 		read();
@@ -145,39 +146,79 @@ public class DBService extends IntentService {
 		out.println(password);
 		result = read();
 		if (result.equals("-1")) {
-			System.out.println("shit");
-			return "";
+			return;
 		} else {
 			this.connectionKey = result;
-			System.out.println(result + " of length " + result.length());
-			return result;
+			return;
 		}
 	}
 
 	/**
 	 * Attempts to add a fish
 	 */
-	public int testAddFish(Catch c) {
-		connect();
+	public int testAddFish(Catch c, File image) {
+		System.out.println("try to send catch");
+		// Connect
+		if (connect() == -1) {
+			System.out.println("connection failed");
+			return -1;
+		}
+		System.out.println("connected");
+		// Wait for response
 		read();
+		// Send connection key
 		out.println(connectionKey);
 		if (read().equals("-1")) {
 			System.out.println("connection authentication failed");
-			return -1;
+			return -2;
 		}
+		// Send 'add' command
 		out.println("add");
+		System.out.println("add");
+		// Wait for response
 		read();
-		// Create the output stream to the server
+		System.out.println("add response");
+		// Write Catch object to server
 		try {
 			ObjectOutputStream outToServer = new ObjectOutputStream(
 					socket.getOutputStream());
 			outToServer.writeObject(c);
+			System.out.println("catch sent");
 		} catch (IOException e) {
 			e.printStackTrace();
-			return -2;
+			System.out.println("Catch object failed");
+			return -3;
 		}
-		return 0;
+		// Wait for server response
+		read();
+		System.out.println("catch response gotten");
+		// Send image
+		try {
+			FileInputStream fIn = new FileInputStream(image);
+			OutputStream os = socket.getOutputStream();
 
+			byte[] buf = new byte[8192];
+			int len = 0;
+			while ((len = fIn.read(buf)) != -1) {
+				os.write(buf, 0, len);
+				System.out.println(len);
+			}
+			os.flush();
+			System.out.println("image written");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			System.out.println("image write failed");
+			return -4;
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("image write failed 2");
+			return -4;
+		}
+		// read ok
+		read();
+		System.out.println("done sending catch");
+		// Done
+		return 0;
 	}
 
 	/**

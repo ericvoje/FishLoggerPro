@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.fishloggerpro.R;
@@ -42,34 +40,15 @@ public class SplashActivity extends Activity implements Receiver {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.splash, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
-	@Override
 	public void onReceiveResult(int resultCode, Bundle resultData) {
-		Intent intent = new Intent(this, AddFishActivity.class);
-		intent.putExtra("connectionKey", resultData.getString("connectionKey"));
-		startActivity(intent);
-		/*
-		 * if (resultCode == 0) { } else {
-		 * Toast.makeText(getApplicationContext(), "Login Failed",
-		 * Toast.LENGTH_SHORT).show(); }
-		 */
-
+		if (resultCode == 0) {
+			Intent intent = new Intent(this, AddFishActivity.class);
+			intent.putExtra("connectionKey",
+					resultData.getString("connectionKey"));
+			startActivity(intent);
+		} else {
+			Toast.makeText(getApplicationContext(), "Login Failed",
+					Toast.LENGTH_SHORT).show();
+		}
 	}
 }
